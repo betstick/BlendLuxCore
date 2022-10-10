@@ -275,11 +275,11 @@ def _convert_final_engine(scene, definitions, config):
         if config.device == "OCL":
             # OpenCL specific settings
             _convert_opencl_settings(scene, definitions, True)
-    elif config.enge == "BIDIR":
+    elif config.engine == "BIDIR":
         luxcore_engine = "BIDIRCPU"
         definitions["light.maxdepth"] = config.bidir_light_maxdepth
         definitions["path.maxdepth"] = config.bidir_path_maxdepth
-    elif config.enge == "BIDIRVM":
+    elif config.engine == "BIDIRVM":
         luxcore_engine = "BIDIRVMCPU"
         definitions["light.maxdepth"] = config.bidirvm_light_maxdepth
         definitions["path.maxdepth"] = config.bidirvm_path_maxdepth

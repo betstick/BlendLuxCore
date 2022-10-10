@@ -44,6 +44,10 @@ class LuxCoreViewportSettings(bpy.types.PropertyGroup):
                                          "you need to preview them in the viewport render. If disabled, "
                                          "the RT Path engine is used in the viewport, which is optimized "
                                          "for quick feedback but can't handle complex light paths")
+
+    use_bidirvm: BoolProperty(name="Use BidirVM", default=False,
+                             description="Not recommended. Not particularly responsive.")
+
     add_light_tracing: BoolProperty(name="Add Light Tracing", default=True,
                                     description="Add light tracing in viewport. If disabled, "
                                          "the RT Path engine is used in the viewport, which is optimized "

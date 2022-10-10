@@ -92,6 +92,8 @@ class LUXCORE_RENDERLAYER_PT_aovs_light(ViewLayerButtonsPanel, Panel):
         if aovs.caustic:
             if config.engine == "BIDIR":
                 layout.label(text="Caustic AOV will contain unexpected results with Bidir", icon=icons.WARNING)
+            elif config.engine == "BIDIRVM":
+                layout.label(text="Caustic AOV will contain unexpected results with BidirVM", icon=icons.WARNING)
             elif config.engine == "PATH" and not config.path.hybridbackforward_enable:
                 layout.label(text="Enable light tracing for caustic AOV", icon=icons.WARNING)
 

@@ -108,6 +108,8 @@ class LuxCoreNodeMatOutput(bpy.types.Node, LuxCoreNodeOutput):
         col.active = engine == "PATH"
         if engine == "BIDIR":
             col.label(text="Not supported by Bidir engine:", icon=icons.INFO)
+        if engine == "BIDIRVM":
+            col.label(text="Not supported by BidirVM engine:", icon=icons.INFO)
 
         # PhotonGI
         row = col.row()

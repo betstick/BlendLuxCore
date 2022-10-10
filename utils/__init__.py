@@ -502,6 +502,8 @@ def using_filesaver(is_viewport_render, scene):
 def using_bidir_in_viewport(scene):
     return scene.luxcore.config.engine == "BIDIR" and scene.luxcore.viewport.use_bidir
 
+def using_bidirvm_in_viewport(scene):
+    return scene.luxcore.config.engine == "BIDIRVM" and scene.luxcore.viewport.use_bidirvm
 
 def using_hybridbackforward(scene):
     config = scene.luxcore.config
@@ -528,6 +530,8 @@ def is_pixel_filtering_forced_disabled(scene, denoiser_enabled):
     if denoiser_enabled:
         # Bidir renders are not properly denoised with pixel filtering
         if config.engine == "BIDIR":
+            return True
+        if config.engine == "BIDIRVM":
             return True
         # Light traced caustics are not properly denoised with pixel filtering
         if config.engine == "PATH" and config.path.hybridbackforward_enable:

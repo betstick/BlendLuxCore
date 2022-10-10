@@ -430,6 +430,14 @@ class Exporter(object):
                 config_settings.bidir_path_maxdepth,
                 config_settings.bidir_light_maxdepth,
             )
+        if render_engine == "BIDIRVMCPU":
+            path_depths = (
+                config_settings.bidirvm_path_maxdepth,
+                config_settings.bidirvm_light_maxdepth,
+                config_settings.bidirvm_lightpath_count,
+                config_settings.bidirvm_startradius_scale,
+                config_settings.bidirvm_alpha,
+            )
         else:
             path_depths = (
                 path_settings.depth_total,
@@ -445,4 +453,4 @@ class Exporter(object):
             stats.clamping.value = 0
         
         stats.use_hybridbackforward.value = (config_props.Get("path.hybridbackforward.enable", [False]).GetBool()
-                                             and render_engine != "BIDIRCPU")
+                                             and render_engine != "BIDIRCPU" and render_engine != "BIDIRVMCPU")

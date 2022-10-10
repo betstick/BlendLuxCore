@@ -28,9 +28,12 @@ def luxcore_render_draw(panel, context):
                 col_device.label(text="No OpenCL support in this BlendLuxCore version", icon=icons.ERROR)
             if gpu_backend == "CUDA" and not utils.is_cuda_build():
                 col_device.label(text="No CUDA support in this BlendLuxCore version", icon=icons.ERROR)
-    else:
+    elif config.engine == "BIDIR":
         col_device.enabled = False
         col_device.prop(config, "bidir_device", text="Device")
+    elif config.engine == "BIDIRVM":
+        col_device.enabled = False
+        col_device.prop(config, "bidirvm_device", text="Device")
 
     # Engine
     col = layout.column(align=True)
@@ -76,11 +79,17 @@ class LUXCORE_RENDER_PT_lightpaths_bounces(RenderButtonsPanel, Panel):
             draw_bounce_prop(col, "depth_diffuse")
             draw_bounce_prop(col, "depth_glossy")
             draw_bounce_prop(col, "depth_specular")
-        else:
+        elif config.engine == "BIDIR":
             # Bidir options
             col.prop(config, "bidir_path_maxdepth")
             col.prop(config, "bidir_light_maxdepth")
-
+        elif config.engine == "BIDIRVM":
+            # BidirVM options
+            col.prop(config, "bidirvm_path_maxdepth")
+            col.prop(config, "bidirvm_light_maxdepth")
+            col.prop(config, "bidirvm_lightpath_count")
+            col.prop(config, "bidirvm_startradius_scale")
+            col.prop(config, "bidirvm_alpha")
 
 class LUXCORE_RENDER_PT_add_light_tracing(RenderButtonsPanel, Panel):
     COMPAT_ENGINES = {"LUXCORE"}

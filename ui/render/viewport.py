@@ -30,6 +30,14 @@ class LUXCORE_RENDER_PT_viewport_settings(RenderButtonsPanel, Panel):
             if viewport.device == "OCL" and not (utils.is_opencl_build() or utils.is_cuda_build()):
                 layout.label(text="No GPU support in this BlendLuxCore version", icon=icons.ERROR)
                 layout.label(text="(Falling back to CPU realtime engine)")
+
+        if not (luxcore_engine == "BIDIRVM" and viewport.use_bidirvm):
+            col = layout.column(align=True)
+            col.prop(viewport, "device", text="Device", expand=False)
+
+            if viewport.device == "OCL" and not (utils.is_opencl_build() or utils.is_cuda_build()):
+                layout.label(text="No GPU support in this BlendLuxCore version", icon=icons.ERROR)
+                layout.label(text="(Falling back to CPU realtime engine)")
         
         layout.prop(viewport, "halt_time")
 
@@ -39,6 +47,8 @@ class LUXCORE_RENDER_PT_viewport_settings(RenderButtonsPanel, Panel):
         if luxcore_engine == "BIDIR":
             layout.prop(viewport, "use_bidir")
 
+        if luxcore_engine == "BIDIRVM":
+            layout.prop(viewport, "use_bidirvm")
 
 class LUXCORE_RENDER_PT_viewport_settings_denoiser(RenderButtonsPanel, Panel):
     COMPAT_ENGINES = {"LUXCORE"}
@@ -94,7 +104,8 @@ class LUXCORE_RENDER_PT_viewport_settings_advanced(RenderButtonsPanel, Panel):
         viewport = context.scene.luxcore.viewport
 
         resolution_reduction_supported = not (utils.using_bidir_in_viewport(context.scene)
-                                              or utils.using_hybridbackforward_in_viewport(context.scene))
+                                              or utils.using_hybridbackforward_in_viewport(context.scene)
+											  or utils.using_bidirvm_in_viewport(context.scene))
         col = layout.column(align=True)
         col.enabled = resolution_reduction_supported
         col.prop(viewport, "reduce_resolution_on_edit")

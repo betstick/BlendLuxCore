@@ -11,7 +11,9 @@ def draw_persistent_file_ui(context, layout, settings):
     layout.use_property_decorate = False
 
     engine_is_bidir = context.scene.luxcore.config.engine == "BIDIR"
+    engine_is_bidirvm = context.scene.luxcore.config.engine == "BIDIRVM"
     layout.active = settings.enabled and not engine_is_bidir
+    layout.active = settings.enabled and not engine_is_bidirvm
 
     file_abspath = utils.get_abspath(settings.file_path, library=context.scene.library)
     file_exists = os.path.isfile(file_abspath)
@@ -113,7 +115,12 @@ class LUXCORE_RENDER_PT_caches_photongi_indirect(RenderButtonsPanel, Panel):
         if engine_is_bidir:
             layout.label(text="Not supported by Bidir", icon=icons.INFO)
 
+        engine_is_bidirvm = context.scene.luxcore.config.engine == "BIDIRVM"
+        if engine_is_bidirvm:
+            layout.label(text="Not supported by BidirVM", icon=icons.INFO)
+
         layout.active = photongi.enabled and photongi.indirect_enabled and not engine_is_bidir
+        layout.active = photongi.enabled and photongi.indirect_enabled and not engine_is_bidirvm
 
         col = layout.column(align=True)
         col.prop(photongi, "indirect_haltthreshold_preset")

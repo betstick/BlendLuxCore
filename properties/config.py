@@ -26,6 +26,15 @@ BIDIR_DESC = (
     "Does not support all AOV types and special features like shadow catcher or indirect light visibility flags for lights"
 )
 
+BIDIRVM_DESC = (
+    "EXPERIMANTAL BIDIRECTIONAL VERTEX CONNECTION MAPPING.\n"
+    "Suited for some special edge-case types of scenes that can't be rendered efficiently by the Path engine.\n"
+    "Slower than the Path engine otherwise.\n"
+    'Limited to the CPU, can not run on the GPU.\n'
+    "Can render SDS-caustics efficiently.\n"
+    "Does not support all AOV types and special features like shadow catcher or indirect light visibility flags for lights.\n"
+)
+
 SOBOL_DESC = "Optimized random noise pattern. Supports noise-aware adaptive sampling"
 METROPOLIS_DESC = "Sampler that focuses samples on brighter parts of the image. Not noise-aware. Suited for rendering caustics"
 RANDOM_DESC = (
@@ -413,6 +422,7 @@ class LuxCoreConfig(PropertyGroup):
     engines = [
         ("PATH", "Path", PATH_DESC, 0),
         ("BIDIR", "Bidir", BIDIR_DESC, 1),
+        ("BIDIRVM", "BidirVM", BIDIRVM_DESC, 2),
     ]
     engine: EnumProperty(name="Engine", items=engines, default="PATH")
 
@@ -493,6 +503,9 @@ class LuxCoreConfig(PropertyGroup):
     bidir_device: EnumProperty(name="Device", items=devices, default="CPU",
                                description="Bidir is only available on CPU. Switch to the Path engine if you want to render on the GPU")
 
+    bidirvm_device: EnumProperty(name="Device", items=devices, default="CPU",
+                               description="BidirVM is only available on CPU. Switch to the Path engine if you want to render on the GPU")
+
     use_tiles: BoolProperty(name="Use Tiled Path (slower)", default=False, description=TILED_DESCRIPTION)
     
     def using_tiled_path(self):
@@ -508,6 +521,14 @@ class LuxCoreConfig(PropertyGroup):
     # path.maxdepth
     # TODO description
     bidir_path_maxdepth: IntProperty(name="Eye Depth", default=10, min=1, soft_max=16)
+
+    bidirvm_light_maxdepth: IntProperty(name="Light Depth", default=10, min=1, soft_max=16)
+    # path.maxdepth
+    # TODO description
+    bidirvm_path_maxdepth: IntProperty(name="Eye Depth", default=10, min=1, soft_max=16)
+    bidirvm_lightpath_count: IntProperty(name="Light Path Count", default=32768, min=1, soft_max=32768)
+    bidirvm_startradius_scale: FloatProperty(name="Start Radius Scale", default=0.001, min=0.00001, soft_max=1.0, subtype="DISTANCE")
+    bidirvm_alpha: FloatProperty(name="Radius Reduction", default=0.95, min=0.01, max=2.0)
 
     # Pixel filter
     filter_enabled: BoolProperty(name="Enable Pixel Filtering", default=False, description=FILTER_DESC)

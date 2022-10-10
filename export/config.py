@@ -192,6 +192,17 @@ def convert_viewport_engine(context, scene, definitions, config):
         definitions["sampler.sobol.adaptive.strength"] = 0
         definitions["sampler.random.adaptive.strength"] = 0
         _convert_metropolis_settings(definitions, config)
+    elif utils.using_bidirvm_in_viewport(scene):
+        luxcore_engine = "BIDIRVMCPU"
+        definitions["light.maxdepth"] = config.bidirvm_light_maxdepth
+        definitions["path.maxdepth"] = config.bidirvm_path_maxdepth
+        definitions["bidirvm.lightpath.count"] = config.bidirvm_lightpath_count
+        definitions["bidirvm.startradius.scale"] = config.bidirvm_startradius_scale
+        definitions["bidirvm.alpha"] = config.bidirvm_alpha
+        sampler = config.sampler
+        definitions["sampler.sobol.adaptive.strength"] = 0
+        definitions["sampler.random.adaptive.strength"] = 0
+        _convert_metropolis_settings(definitions, config)
     elif device == "CPU":
         if using_hybridbackforward:
             luxcore_engine = "PATHCPU"
@@ -264,11 +275,17 @@ def _convert_final_engine(scene, definitions, config):
         if config.device == "OCL":
             # OpenCL specific settings
             _convert_opencl_settings(scene, definitions, True)
-    else:
-        # config.engine == BIDIR
+    elif config.enge == "BIDIR":
         luxcore_engine = "BIDIRCPU"
         definitions["light.maxdepth"] = config.bidir_light_maxdepth
         definitions["path.maxdepth"] = config.bidir_path_maxdepth
+    elif config.enge == "BIDIRVM":
+        luxcore_engine = "BIDIRVMCPU"
+        definitions["light.maxdepth"] = config.bidirvm_light_maxdepth
+        definitions["path.maxdepth"] = config.bidirvm_path_maxdepth
+        definitions["bidirvm.lightpath.count"] = config.bidirvm_lightpath_count
+        definitions["bidirvm.startradius.scale"] = config.bidirvm_startradius_scale
+        definitions["bidirvm.alpha"] = config.bidirvm_alpha
 
     # Sampler
     if config.engine == "PATH" and config.use_tiles:
